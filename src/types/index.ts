@@ -20,3 +20,9 @@ export interface RawNoteData {
 export interface RawNote extends RawNoteData {
   id: string;
 }
+
+export interface SimplifiedNote {
+  tags: Tag[];
+  title: string;
+  id: string;
+}

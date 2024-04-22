@@ -31,13 +31,13 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
     <Form onSubmit={handleSubmit}>
       <Stack gap={4}>
         <Row>
-          <Col>
+          <Col xs="12" md="6">
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
               <Form.Control ref={titleRef} required />
             </Form.Group>
           </Col>
-          <Col>
+          <Col xs="12" md="6">
             <Form.Group controlId="tags">
               <Form.Label>Tags</Form.Label>
               <CreatableReactSelect
