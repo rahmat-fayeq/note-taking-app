@@ -32,6 +32,10 @@ const App = () => {
     });
   };
 
+  const handleAddTag = (tag: Tag) => {
+    setTags((prev) => [...prev, tag]);
+  };
+
   const handleUpdateNote = (id: string, { tags, ...data }: NoteData) => {
     setNotes((prevNotes) => {
       return prevNotes.map((note) => {
@@ -44,8 +48,10 @@ const App = () => {
     });
   };
 
-  const handleAddTag = (tag: Tag) => {
-    setTags((prev) => [...prev, tag]);
+  const handleDeleteTag = (id: string) => {
+    setNotes((prevNotes) => {
+      return prevNotes.filter((note) => note.id !== id);
+    });
   };
 
   return (
@@ -66,7 +72,7 @@ const App = () => {
           }
         />
         <Route path="/:id" element={<NoteLayout notes={noteWithTags} />}>
-          <Route index element={<Note />} />
+          <Route index element={<Note onDeleteNote={handleDeleteTag} />} />
           <Route
             path="edit"
             element={
