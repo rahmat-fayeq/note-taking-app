@@ -4,40 +4,48 @@ import { Link, useNavigate } from "react-router-dom";
 import CreatableReactSelect from "react-select/creatable";
 import { v4 as uuidV4 } from "uuid";
 import { NoteData, Tag } from "../types";
+import { useNote } from "../hooks/useNote";
 
-interface NoteFormProps {
-  onSubmit: (data: NoteData) => void;
+interface EditNoteFormProps {
+  onSubmit: (id: string, data: NoteData) => void;
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
 }
 
-const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
+const EditNoteForm = ({
+  onSubmit,
+  onAddTag,
+  availableTags,
+}: EditNoteFormProps) => {
+  const note = useNote();
   const titleRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedTag, setSelectedTag] = useState<Tag[]>([]);
+  const [selectedTag, setSelectedTag] = useState<Tag[]>(() => note.tags);
   const navigate = useNavigate();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit({
+    const id = note.id;
+    const data = {
       title: titleRef.current!.value,
       markdown: bodyRef.current!.value,
       tags: selectedTag,
-    });
+    };
+    onSubmit(id, data);
     navigate("..");
   };
 
   return (
     <Form onSubmit={handleSubmit}>
       <Stack gap={4}>
-        <Row md="12">
-          <Col>
+        <Row>
+          <Col xs="12" md="6">
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
-              <Form.Control ref={titleRef} required />
+              <Form.Control ref={titleRef} defaultValue={note.title} required />
             </Form.Group>
           </Col>
-          <Col>
+          <Col xs="12" md="6">
             <Form.Group controlId="tags">
               <Form.Label>Tags</Form.Label>
               <CreatableReactSelect
@@ -66,7 +74,13 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
         </Row>
         <Form.Group controlId="markdown">
           <Form.Label>Body</Form.Label>
-          <Form.Control ref={bodyRef} as="textarea" rows={15} required />
+          <Form.Control
+            ref={bodyRef}
+            as="textarea"
+            defaultValue={note.markdown}
+            rows={15}
+            required
+          />
         </Form.Group>
         <Stack direction="horizontal" gap={2} className="justify-content-end">
           <Button type="submit" variant="primary">
@@ -83,4 +97,4 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
   );
 };
 
-export default NoteForm;
+export default EditNoteForm;
