@@ -1,11 +1,11 @@
 import { Container } from "react-bootstrap";
 import { Navigate, Route, Routes } from "react-router-dom";
-import NewNote from "./components/NewNote";
+import NewNote from "./pages/NewNote";
 import { NoteData, RawNote, Tag } from "./types";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
-import NoteList from "./components/NoteList";
+import NoteList from "./pages/NoteList";
 import NoteLayout from "./components/NoteLayout";
 import Note from "./pages/Note";
 import EditNoteForm from "./pages/EditNoteForm";
@@ -48,9 +48,27 @@ const App = () => {
     });
   };
 
-  const handleDeleteTag = (id: string) => {
+  const handleDeleteNote = (id: string) => {
     setNotes((prevNotes) => {
       return prevNotes.filter((note) => note.id !== id);
+    });
+  };
+
+  const handleDeleteTag = (id: string) => {
+    setTags((prevTags) => {
+      return prevTags.filter((tag) => tag.id !== id);
+    });
+  };
+
+  const handleUpdateTag = (id: string, label: string) => {
+    setTags((prevTags) => {
+      return prevTags.map((tag) => {
+        if (tag.id === id) {
+          return { ...tag, label };
+        } else {
+          return tag;
+        }
+      });
     });
   };
 
@@ -59,7 +77,14 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={<NoteList availableTags={tags} notes={noteWithTags} />}
+          element={
+            <NoteList
+              availableTags={tags}
+              notes={noteWithTags}
+              onDeleteTag={handleDeleteTag}
+              onUpdateTag={handleUpdateTag}
+            />
+          }
         />
         <Route
           path="/new"
@@ -72,7 +97,7 @@ const App = () => {
           }
         />
         <Route path="/:id" element={<NoteLayout notes={noteWithTags} />}>
-          <Route index element={<Note onDeleteNote={handleDeleteTag} />} />
+          <Route index element={<Note onDeleteNote={handleDeleteNote} />} />
           <Route
             path="edit"
             element={

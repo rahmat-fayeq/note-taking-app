@@ -1,5 +1,5 @@
 import { NoteData, Tag } from "../types";
-import NoteForm from "./NoteForm";
+import NoteForm from "../components/NoteForm";
 
 interface NewNoteProps {
   onSubmit: (data: NoteData) => void;

@@ -42,6 +42,7 @@ const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
               <Form.Label>Tags</Form.Label>
               <CreatableReactSelect
                 isMulti
+                required
                 onCreateOption={(label) => {
                   const newTag = { id: uuidV4(), label };
                   onAddTag(newTag);

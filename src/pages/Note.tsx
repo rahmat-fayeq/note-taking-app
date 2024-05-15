@@ -5,7 +5,6 @@ import ReactMarkdown from "react-markdown";
 
 const Note = ({ onDeleteNote }: { onDeleteNote: (id: string) => void }) => {
   const note = useNote();
-
   return (
     <>
       <Row className="align-items-center mb-4">
